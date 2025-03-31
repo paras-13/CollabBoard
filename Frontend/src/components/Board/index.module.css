@@ -1,0 +1,9 @@
+.brushIcon {
+  cursor: url("/assets/icons8-pencil-26.png") 0 26, auto;
+}
+.shapeIcon {
+  cursor: url("/assets/plus.png") 13 13, auto;
+}
+.eraseIcon {
+  cursor: url("/assets/eraser.png") 0 26, auto;
+}
