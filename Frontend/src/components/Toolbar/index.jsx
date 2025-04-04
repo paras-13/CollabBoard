@@ -8,12 +8,21 @@ import {
   FaArrowRight,
   FaPaintBrush,
   FaEraser,
+  FaFont,
+  FaUndo,
+  FaRedo,
 } from "react-icons/fa";
 import { LuRectangleHorizontal } from "react-icons/lu";
+import { MdDelete } from "react-icons/md";
 import { TOOL_ITEMS } from "../../utils/constants";
 import boardContext from "../../store/board-context";
 const ToolBar = () => {
-  const { activeToolItem, changeToolHandler } = useContext(boardContext);
+  const { activeToolItem, changeToolHandler, undo, redo, clear } =
+    useContext(boardContext);
+  const handleClear = () => {
+    changeToolHandler(TOOL_ITEMS.CLEAR);
+    clear();
+  };
   return (
     <>
       <div className={classes.container}>
@@ -64,6 +73,27 @@ const ToolBar = () => {
           onClick={() => changeToolHandler(TOOL_ITEMS.ERASER)}
         >
           <FaEraser />
+        </div>
+        <div
+          className={cx(classes.toolItem, {
+            [classes.active]: activeToolItem === TOOL_ITEMS.TEXT,
+          })}
+          onClick={() => changeToolHandler(TOOL_ITEMS.TEXT)}
+        >
+          <FaFont />
+        </div>
+      </div>
+      <div className={classes.bottomLeftContainer}>
+        <div className={classes.toolItem} onClick={undo}>
+          <FaUndo />
+        </div>
+        <div className={classes.toolItem} onClick={redo}>
+          <FaRedo />
+        </div>
+      </div>
+      <div className={classes.bottomRightContainer}>
+        <div className={classes.toolItem} onClick={handleClear}>
+          <MdDelete />
         </div>
       </div>
     </>

@@ -7,13 +7,16 @@ import cx from "classnames";
 import classes from "./index.module.css";
 function Board() {
   const canvasRef = useRef();
+  const textAreaRef = useRef();
   const { toolboxState } = useContext(toolboxContext);
   const {
     elements,
     activeToolItem,
+    toolActionType,
     boardMouseDownHandler,
     boardMouseMoveHandler,
     boardMouseUpHandler,
+    textAreaBlurHandler,
   } = useContext(boardContext);
 
   useEffect(() => {
@@ -40,6 +43,16 @@ function Board() {
           context.fill(element.path);
           context.restore();
           break;
+        case TOOL_ITEMS.TEXT:
+          context.textBaseLine = "top";
+          context.font = `${element.size}px Merienda`;
+          context.fillStyle = element.stroke;
+          context.fillText(element.text, element.x1, element.y1);
+          context.restore();
+          break;
+        case TOOL_ITEMS.CLEAR:
+          context.clearRect(0, 0, canvas.width, canvas.height);
+          break;
         default:
           throw new Error("Type not recognized");
       }
@@ -48,6 +61,16 @@ function Board() {
       context.clearRect(0, 0, canvas.width, canvas.height);
     };
   }, [elements]);
+
+  useEffect(() => {
+    const textArea = textAreaRef.current;
+    if (toolActionType === TOOL_ACTION_TYPES.WRITING) {
+      setTimeout(() => {
+        textArea.focus();
+      }, 0);
+    }
+  }, [toolActionType]);
+
   const handleMouseDown = (e) => {
     boardMouseDownHandler(e, toolboxState);
   };
@@ -59,6 +82,21 @@ function Board() {
   };
   return (
     <>
+      {toolActionType === TOOL_ACTION_TYPES.WRITING && (
+        <textarea
+          type="text"
+          ref={textAreaRef}
+          className={classes.textElementBox}
+          placeholder="Enter text:"
+          style={{
+            top: elements[elements.length - 1].y1,
+            left: elements[elements.length - 1].x1,
+            fontSize: `${elements[elements.length - 1]?.size}px`,
+            color: elements[elements.length - 1]?.stroke,
+          }}
+          onBlur={(e) => textAreaBlurHandler(e.target.value)}
+        />
+      )}
       <canvas
         ref={canvasRef}
         id="canvas"

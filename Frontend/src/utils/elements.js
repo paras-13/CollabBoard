@@ -3,7 +3,7 @@ import getStroke from "perfect-freehand";
 import rough from "roughjs/bin/rough";
 import { getArrowHeadCoordinates } from "./maths";
 const gen = rough.generator();
-export const createRoughElement = (
+export const createElement = (
   id,
   x1,
   y1,
@@ -82,6 +82,11 @@ export const createRoughElement = (
       element.roughElement = gen.linearPath(points, options);
       return element;
     }
+    case TOOL_ITEMS.TEXT: {
+      element.text = "";
+      return element;
+    }
+
     default:
       throw new Error("Type not recognized");
   }

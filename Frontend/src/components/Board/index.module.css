@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Merienda:wght@400;700&display=swap");
+
 .brushIcon {
   cursor: url("/assets/icons8-pencil-26.png") 0 26, auto;
 }
@@ -6,4 +8,22 @@
 }
 .eraseIcon {
   cursor: url("/assets/eraser.png") 0 26, auto;
+}
+
+.textElementBox {
+  @apply border border-slate-200 rounded;
+  position: fixed;
+  background: transparent;
+  resize: none;
+  outline: none;
+  padding: 0;
+  margin: 0;
+  width: 25%;
+  height: auto;
+  overflow: hidden;
+  font-size: inherit;
+  color: inherit;
+  line-height: inherit;
+  /* font-family: "Caveat"; */
+  font-family: "Merienda";
 }
