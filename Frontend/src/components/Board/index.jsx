@@ -17,6 +17,8 @@ function Board() {
     boardMouseMoveHandler,
     boardMouseUpHandler,
     textAreaBlurHandler,
+    undo,
+    redo,
   } = useContext(boardContext);
 
   useEffect(() => {
@@ -24,6 +26,18 @@ function Board() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
   }, []);
+
+  // Key shortcut
+  useEffect(() => {
+    function handleKeyDown(e) {
+      if (e.ctrlKey && e.key === "z") undo();
+      else if (e.ctrlKey && e.key === "y") redo();
+    }
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [undo, redo]);
   useLayoutEffect(() => {
     // console.log("Redrawing Canvas");
     const canvas = canvasRef.current;

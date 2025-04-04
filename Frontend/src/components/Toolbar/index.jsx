@@ -11,6 +11,7 @@ import {
   FaFont,
   FaUndo,
   FaRedo,
+  FaDownload,
 } from "react-icons/fa";
 import { LuRectangleHorizontal } from "react-icons/lu";
 import { MdDelete } from "react-icons/md";
@@ -22,6 +23,15 @@ const ToolBar = () => {
   const handleClear = () => {
     changeToolHandler(TOOL_ITEMS.CLEAR);
     clear();
+  };
+
+  const handleDownloadClick = () => {
+    const canvas = document.getElementById("canvas");
+    const data = canvas.toDataURL("image/png");
+    const anchor = document.createElement("a");
+    anchor.href = data;
+    anchor.download = "board.png";
+    anchor.click();
   };
   return (
     <>
@@ -94,6 +104,9 @@ const ToolBar = () => {
       <div className={classes.bottomRightContainer}>
         <div className={classes.toolItem} onClick={handleClear}>
           <MdDelete />
+        </div>
+        <div className={classes.toolItem} onClick={handleDownloadClick}>
+          <FaDownload />
         </div>
       </div>
     </>

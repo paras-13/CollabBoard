@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { useReducer } from "react";
 import boardContext from "./board-context";
 import getStroke from "perfect-freehand";
@@ -249,17 +249,17 @@ const BoardProvider = ({ children }) => {
     });
   };
 
-  const boardUndoHandler = () => {
+  const boardUndoHandler = useCallback(() => {
     dispatchBoardAction({
       type: BOARD_ACTIONS.UNDO,
     });
-  };
+  }, []);
 
-  const boardRedoHandler = () => {
+  const boardRedoHandler = useCallback(() => {
     dispatchBoardAction({
       type: BOARD_ACTIONS.REDO,
     });
-  };
+  }, []);
   const boardClearHandler = () => {
     dispatchBoardAction({
       type: BOARD_ACTIONS.CLEAR,
