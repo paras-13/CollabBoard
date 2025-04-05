@@ -10,6 +10,7 @@ const boardContext = createContext({
   boardMouseMoveHandler: () => {},
   boardMouseUpHandler: () => {},
   textAreaBlurHandler: () => {},
+  boardImageUploadHandler: () => {},
   undo: () => {},
   redo: () => {},
   clear: () => {},

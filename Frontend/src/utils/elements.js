@@ -9,7 +9,7 @@ export const createElement = (
   y1,
   x2,
   y2,
-  { type, stroke, fill, size }
+  { type, stroke, fill, size, imageSrc }
 ) => {
   const element = {
     id,
@@ -86,7 +86,12 @@ export const createElement = (
       element.text = "";
       return element;
     }
-
+    case TOOL_ITEMS.IMAGE: {
+      element.x2 = x2;
+      element.y2 = y2;
+      element.imageSrc = imageSrc;
+      return element;
+    }
     default:
       throw new Error("Type not recognized");
   }

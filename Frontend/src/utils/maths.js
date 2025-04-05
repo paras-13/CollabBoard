@@ -70,6 +70,14 @@ export const isPointNearElement = (element, pointX, pointY) => {
         isPointCloseToLine(x1, y1 + textHeight, x1, y1, pointX, pointY)
       );
     }
+    case TOOL_ITEMS.IMAGE: {
+      return (
+        isPointCloseToLine(x1, y1, x2, y1, pointX, pointY) ||
+        isPointCloseToLine(x2, y1, x2, y2, pointX, pointY) ||
+        isPointCloseToLine(x2, y2, x1, y2, pointX, pointY) ||
+        isPointCloseToLine(x1, y2, x1, y1, pointX, pointY)
+      );
+    }
     default:
       throw new Error("Type not recognized");
   }

@@ -71,6 +71,18 @@ const boardReducer = (state, action) => {
             ...state,
             elements: updateElement,
           };
+        case TOOL_ITEMS.IMAGE: {
+          const { x1, y1, imageSrc } = updateElement[index];
+          const newElement = createElement(index, x1, y1, clientX, clientY, {
+            type,
+            imageSrc,
+          });
+          updateElement[index] = newElement;
+          return {
+            ...state,
+            elements: updateElement,
+          };
+        }
         default:
           throw new Error("Type not recognized");
       }
@@ -115,6 +127,33 @@ const boardReducer = (state, action) => {
         elements: newElement,
         history: newHistory,
         index: state.index + 1,
+      };
+    }
+    case BOARD_ACTIONS.ADD_IMAGE: {
+      const newElement = {
+        id: state.elements.length,
+        type: TOOL_ITEMS.IMAGE,
+        imageSrc: action.payload.imageSrc,
+      };
+      return {
+        ...state,
+        elements: [...state.elements, newElement],
+      };
+    }
+
+    case BOARD_ACTIONS.UPLOAD_IMAGE: {
+      const { clientX, clientY } = action.payload;
+      const index = state.elements.length - 1;
+      const prevElement = state.elements[index];
+      prevElement.x1 = clientX;
+      prevElement.y1 = clientY;
+      prevElement.x2 = clientX;
+      prevElement.y2 = clientY;
+      state.elements[index] = prevElement;
+      return {
+        ...state,
+        toolActionType: TOOL_ACTION_TYPES.UPLOADING,
+        elements: state.elements,
       };
     }
     case BOARD_ACTIONS.DRAW_UP: {
@@ -197,7 +236,16 @@ const BoardProvider = ({ children }) => {
       return;
     }
     const { clientX, clientY } = e;
-
+    if (boardState.activeToolItem === TOOL_ITEMS.IMAGE) {
+      dispatchBoardAction({
+        type: BOARD_ACTIONS.UPLOAD_IMAGE,
+        payload: {
+          clientX,
+          clientY,
+        },
+      });
+      return;
+    }
     dispatchBoardAction({
       type: "DRAW_DOWN",
       payload: {
@@ -213,9 +261,12 @@ const BoardProvider = ({ children }) => {
     if (boardState.toolActionType === TOOL_ACTION_TYPES.WRITING) return;
     if (boardState.activeToolItem === TOOL_ITEMS.CLEAR) return;
     const { clientX, clientY } = e;
-    if (boardState.toolActionType === TOOL_ACTION_TYPES.DRAWING)
+    if (
+      boardState.toolActionType === TOOL_ACTION_TYPES.DRAWING ||
+      boardState.toolActionType === TOOL_ACTION_TYPES.UPLOADING
+    ) {
       dispatchBoardAction({ type: "DRAW_MOVE", payload: { clientX, clientY } });
-    else if (boardState.toolActionType === TOOL_ACTION_TYPES.ERASING) {
+    } else if (boardState.toolActionType === TOOL_ACTION_TYPES.ERASING) {
       dispatchBoardAction({
         type: BOARD_ACTIONS.ERASE,
         payload: {
@@ -228,6 +279,14 @@ const BoardProvider = ({ children }) => {
   const boardMouseUpHandler = () => {
     if (boardState.toolActionType === TOOL_ACTION_TYPES.WRITING) return;
     if (boardState.activeToolItem === TOOL_ITEMS.CLEAR) return;
+    if (boardState.activeToolItem === TOOL_ITEMS.IMAGE) {
+      dispatchBoardAction({
+        type: BOARD_ACTIONS.CHANGE_TOOL,
+        payload: {
+          tool: TOOL_ITEMS.BRUSH,
+        },
+      });
+    }
     if (boardState.toolActionType === TOOL_ACTION_TYPES.DRAWING) {
       dispatchBoardAction({
         type: BOARD_ACTIONS.DRAW_UP,
@@ -265,6 +324,15 @@ const BoardProvider = ({ children }) => {
       type: BOARD_ACTIONS.CLEAR,
     });
   };
+
+  const boardImageUploadHandler = (src) => {
+    dispatchBoardAction({
+      type: BOARD_ACTIONS.ADD_IMAGE,
+      payload: {
+        imageSrc: src,
+      },
+    });
+  };
   const boardContextValue = {
     activeToolItem: boardState.activeToolItem,
     elements: boardState.elements,
@@ -274,6 +342,7 @@ const BoardProvider = ({ children }) => {
     boardMouseMoveHandler,
     boardMouseUpHandler,
     textAreaBlurHandler,
+    boardImageUploadHandler,
     undo: boardUndoHandler,
     redo: boardRedoHandler,
     clear: boardClearHandler,

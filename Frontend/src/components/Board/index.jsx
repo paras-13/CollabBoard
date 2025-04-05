@@ -6,6 +6,7 @@ import toolboxContext from "../../store/toolbox-context";
 import cx from "classnames";
 import classes from "./index.module.css";
 function Board() {
+  const imageCache = useRef({});
   const canvasRef = useRef();
   const textAreaRef = useRef();
   const { toolboxState } = useContext(toolboxContext);
@@ -38,42 +39,110 @@ function Board() {
       document.removeEventListener("keydown", handleKeyDown);
     };
   }, [undo, redo]);
+  // useLayoutEffect(() => {
+  //   // console.log("Redrawing Canvas");
+  //   const canvas = canvasRef.current;
+  //   const context = canvas.getContext("2d");
+  //   context.save();
+  //   const roughCanvas = rough.canvas(canvas);
+  //   elements.forEach((element) => {
+  //     switch (element.type) {
+  //       case TOOL_ITEMS.ARROW:
+  //       case TOOL_ITEMS.RECTANGLE:
+  //       case TOOL_ITEMS.CIRCLE:
+  //       case TOOL_ITEMS.LINE:
+  //         roughCanvas.draw(element.roughElement);
+  //         break;
+  //       case TOOL_ITEMS.BRUSH:
+  //         context.fillStyle = element.stroke;
+  //         context.fill(element.path);
+  //         context.restore();
+  //         break;
+  //       case TOOL_ITEMS.TEXT:
+  //         context.textBaseLine = "top";
+  //         context.font = `${element.size}px Merienda`;
+  //         context.fillStyle = element.stroke;
+  //         context.fillText(element.text, element.x1, element.y1);
+  //         context.restore();
+  //         break;
+  //       case TOOL_ITEMS.CLEAR:
+  //         context.clearRect(0, 0, canvas.width, canvas.height);
+  //         break;
+  //       case TOOL_ITEMS.IMAGE: {
+  //         const { x1, y1, x2, y2, imageSrc } = element;
+
+  //         if (!x1 || !y1 || !imageSrc) break;
+
+  //         const img = new Image();
+  //         img.onload = () => {
+  //           context.drawImage(img, x1, y1, x2 - x1, y2 - y1);
+  //         };
+  //         img.src = imageSrc;
+  //         break;
+  //       }
+  //       default:
+  //         throw new Error("Type not recognized");
+  //     }
+  //   });
+  //   return () => {
+  //     context.clearRect(0, 0, canvas.width, canvas.height);
+  //   };
+  // }, [elements]);
+
   useLayoutEffect(() => {
-    // console.log("Redrawing Canvas");
     const canvas = canvasRef.current;
     const context = canvas.getContext("2d");
-    context.save();
+    context.clearRect(0, 0, canvas.width, canvas.height);
     const roughCanvas = rough.canvas(canvas);
     elements.forEach((element) => {
       switch (element.type) {
-        case TOOL_ITEMS.ARROW:
         case TOOL_ITEMS.RECTANGLE:
         case TOOL_ITEMS.CIRCLE:
         case TOOL_ITEMS.LINE:
+        case TOOL_ITEMS.ARROW:
           roughCanvas.draw(element.roughElement);
           break;
+
         case TOOL_ITEMS.BRUSH:
           context.fillStyle = element.stroke;
           context.fill(element.path);
-          context.restore();
           break;
+
         case TOOL_ITEMS.TEXT:
-          context.textBaseLine = "top";
+          context.textBaseline = "top";
           context.font = `${element.size}px Merienda`;
           context.fillStyle = element.stroke;
           context.fillText(element.text, element.x1, element.y1);
-          context.restore();
           break;
-        case TOOL_ITEMS.CLEAR:
-          context.clearRect(0, 0, canvas.width, canvas.height);
+
+        case TOOL_ITEMS.IMAGE: {
+          const { x1, y1, x2, y2, imageSrc } = element;
+          if (!x1 || !y1 || !imageSrc) break;
+
+          // Basically creating image repeatedly will visual impairment in re-render, so we are just maintaing a cache here to directly upload the previously created image on re-render
+          if (imageCache.current[imageSrc]) {
+            context.drawImage(
+              imageCache.current[imageSrc],
+              x1,
+              y1,
+              x2 - x1,
+              y2 - y1
+            );
+          } else {
+            const img = new Image();
+            img.src = imageSrc;
+            img.onload = () => {
+              imageCache.current[imageSrc] = img;
+              context.drawImage(img, x1, y1, x2 - x1, y2 - y1);
+            };
+          }
           break;
+        }
+
         default:
-          throw new Error("Type not recognized");
+          break;
       }
     });
-    return () => {
-      context.clearRect(0, 0, canvas.width, canvas.height);
-    };
   }, [elements]);
 
   useEffect(() => {
@@ -122,6 +191,7 @@ function Board() {
           [classes.shapeIcon]:
             activeToolItem === TOOL_ITEMS.CIRCLE ||
             activeToolItem === TOOL_ITEMS.RECTANGLE ||
+            activeToolItem === TOOL_ITEMS.IMAGE ||
             activeToolItem === TOOL_ITEMS.ARROW,
           [classes.eraseIcon]: activeToolItem === TOOL_ITEMS.ERASER,
         })}

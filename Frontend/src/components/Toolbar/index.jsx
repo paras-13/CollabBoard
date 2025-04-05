@@ -12,14 +12,22 @@ import {
   FaUndo,
   FaRedo,
   FaDownload,
+  FaImages,
 } from "react-icons/fa";
 import { LuRectangleHorizontal } from "react-icons/lu";
 import { MdDelete } from "react-icons/md";
+import { PiCursorFill } from "react-icons/pi";
 import { TOOL_ITEMS } from "../../utils/constants";
 import boardContext from "../../store/board-context";
 const ToolBar = () => {
-  const { activeToolItem, changeToolHandler, undo, redo, clear } =
-    useContext(boardContext);
+  const {
+    activeToolItem,
+    changeToolHandler,
+    undo,
+    redo,
+    clear,
+    boardImageUploadHandler,
+  } = useContext(boardContext);
   const handleClear = () => {
     changeToolHandler(TOOL_ITEMS.CLEAR);
     clear();
@@ -33,9 +41,23 @@ const ToolBar = () => {
     anchor.download = "board.png";
     anchor.click();
   };
+
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    const src = URL.createObjectURL(file);
+    boardImageUploadHandler(src);
+  };
+
+  const handleImageUploadClick = () => {
+    document.getElementById("upload").click();
+    changeToolHandler(TOOL_ITEMS.IMAGE);
+  };
   return (
     <>
       <div className={classes.container}>
+        {/* <div className={classes.toolItem}>
+          <PiCursorFill />
+        </div> */}
         <div
           className={cx(classes.toolItem, {
             [classes.active]: activeToolItem === TOOL_ITEMS.BRUSH,
@@ -91,6 +113,15 @@ const ToolBar = () => {
           onClick={() => changeToolHandler(TOOL_ITEMS.TEXT)}
         >
           <FaFont />
+        </div>
+        <div className={classes.toolItem} onClick={handleImageUploadClick}>
+          <input
+            id="upload"
+            type="file"
+            style={{ display: "none" }}
+            onChange={handleImageUpload}
+          />
+          <FaImages />
         </div>
       </div>
       <div className={classes.bottomLeftContainer}>

@@ -1,3 +1,5 @@
+import { LuImageDown } from "react-icons/lu";
+
 export const TOOL_ITEMS = {
   LINE: "LINE",
   RECTANGLE: "RECTANGLE",
@@ -9,6 +11,7 @@ export const TOOL_ITEMS = {
   UNDO: "UNDO",
   REDO: "REDO",
   CLEAR: "CLEAR",
+  IMAGE: "IMAGE",
 };
 
 export const BOARD_ACTIONS = {
@@ -22,6 +25,8 @@ export const BOARD_ACTIONS = {
   UNDO: "UNDO",
   REDO: "REDO",
   CLEAR: "CLEAR",
+  ADD_IMAGE: "ADD_IMAGE",
+  UPLOAD_IMAGE: "UPLOAD_IMAGE",
 };
 
 export const TOOLBOX_ACTIONS = {
@@ -52,6 +57,7 @@ export const TOOL_ACTION_TYPES = {
   DRAWING: "DRAWING",
   ERASING: "ERASING",
   WRITING: "WRITING",
+  UPLOADING: "UPLOADING",
 };
 
 export const COLORS = {
