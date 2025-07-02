@@ -5,6 +5,8 @@ const boardContext = createContext({
   history: [[]],
   index: 0,
   toolActionType: "",
+  backgroundColor: "#ffffff", // default white
+  setBackgroundColor: () => {},
   changeToolHandler: () => {},
   boardMouseDownHandler: () => {},
   boardMouseMoveHandler: () => {},

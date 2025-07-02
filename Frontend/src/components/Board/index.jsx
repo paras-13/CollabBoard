@@ -20,6 +20,7 @@ function Board() {
     textAreaBlurHandler,
     undo,
     redo,
+    backgroundColor,
   } = useContext(boardContext);
 
   useEffect(() => {
@@ -43,7 +44,12 @@ function Board() {
   useLayoutEffect(() => {
     const canvas = canvasRef.current;
     const context = canvas.getContext("2d");
+    // Fill background first
     context.clearRect(0, 0, canvas.width, canvas.height);
+    context.save();
+    context.fillStyle = backgroundColor || "#fff";
+    context.fillRect(0, 0, canvas.width, canvas.height);
+    context.restore();
     const roughCanvas = rough.canvas(canvas);
     elements.forEach((element) => {
       switch (element.type) {
@@ -94,7 +100,7 @@ function Board() {
           break;
       }
     });
-  }, [elements]);
+  }, [elements, backgroundColor]);
 
   useEffect(() => {
     const textArea = textAreaRef.current;

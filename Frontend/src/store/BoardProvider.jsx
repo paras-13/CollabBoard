@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import { useReducer } from "react";
 import boardContext from "./board-context";
 import getStroke from "perfect-freehand";
@@ -186,17 +186,9 @@ const boardReducer = (state, action) => {
     }
 
     case BOARD_ACTIONS.CLEAR: {
-      const newElement = [...state.elements];
-      newElement.push({ type: state.activeToolItem });
-      const newHistory = [
-        ...state.history.slice(0, state.index + 1),
-        newElement,
-      ];
       return {
         ...state,
-        elements: newElement,
-        history: newHistory,
-        index: state.index + 1,
+        elements: [],
       };
     }
     default:
@@ -216,6 +208,7 @@ const BoardProvider = ({ children }) => {
     boardReducer,
     initialBoardState
   );
+  const [backgroundColor, setBackgroundColor] = useState("#ffffff");
   // const [activeToolItem, setActiveToolItem] = useState(TOOL_ITEMS.LINE);
   const changeToolHandler = (toolItem) => {
     dispatchBoardAction({
@@ -247,7 +240,7 @@ const BoardProvider = ({ children }) => {
       return;
     }
     dispatchBoardAction({
-      type: "DRAW_DOWN",
+      type: BOARD_ACTIONS.DRAW_DOWN,
       payload: {
         clientX,
         clientY,
@@ -337,6 +330,8 @@ const BoardProvider = ({ children }) => {
     activeToolItem: boardState.activeToolItem,
     elements: boardState.elements,
     toolActionType: boardState.toolActionType,
+    backgroundColor,
+    setBackgroundColor,
     changeToolHandler,
     boardMouseDownHandler,
     boardMouseMoveHandler,

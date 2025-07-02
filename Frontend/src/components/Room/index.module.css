@@ -1,0 +1,16 @@
+.container {
+  @apply absolute right-5 top-5px px-1 py-1 flex rounded;
+}
+
+.shareButton {
+  @apply p-2 bg-blue-500 rounded mx-1 text-white shadow-lg;
+}
+.joinButton {
+  @apply p-2 bg-green-500 rounded mx-1 text-white shadow-lg;
+}
+.shareButton:hover {
+  @apply bg-blue-700;
+}
+.joinButton:hover {
+  @apply bg-green-700;
+}

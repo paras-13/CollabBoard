@@ -9,7 +9,6 @@
 .eraseIcon {
   cursor: url("/assets/eraser.png") 0 26, auto;
 }
-
 .textElementBox {
   @apply border border-slate-200 rounded;
   position: fixed;
