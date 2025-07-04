@@ -1,16 +1,38 @@
 .container {
-  @apply absolute right-5 top-5px px-1 py-1 flex rounded;
+  @apply absolute right-5 top-1 px-1 py-1 rounded;
 }
 
-.shareButton {
-  @apply p-2 bg-blue-500 rounded mx-1 text-white shadow-lg;
+.button {
+  @apply py-2.5 px-5 me-2 mb-2 text-sm font-medium focus:outline-none text-white bg-white
+          rounded-full border dark:bg-slate-500 border-gray-200 hover:bg-slate-700 focus:z-10;
 }
-.joinButton {
-  @apply p-2 bg-green-500 rounded mx-1 text-white shadow-lg;
+
+.closeButton {
+  @apply float-right px-2 text-xl border-2 rounded-md bg-gray-300 hover:bg-gray-400 block;
 }
-.shareButton:hover {
-  @apply bg-blue-700;
+.modalBox {
+  @apply fixed inset-0 z-[9999] flex items-center justify-center bg-black/30 backdrop-blur-sm;
 }
-.joinButton:hover {
-  @apply bg-green-700;
+.shareRoomScreen {
+  @apply bg-slate-200 p-6 rounded-lg shadow-lg relative w-1/3 h-2/3 m-2;
+}
+
+.head1 {
+  @apply font-bold text-2xl;
+}
+.head2 {
+  @apply font-bold text-xl;
+}
+.innerShareScreen {
+  @apply border border-gray-400 rounded-md mt-8 p-5;
+}
+
+.desc {
+  @apply text-gray-700 text-sm mb-2;
+}
+.lineDivision {
+  @apply flex items-center my-5;
+}
+.line {
+  @apply border-gray-400 flex-1;
 }
