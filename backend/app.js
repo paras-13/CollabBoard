@@ -16,7 +16,7 @@ app.use(
 app.use("/api/greet/", greet);
 app.get("/", (req, res) => {
   res.send(
-    "<h1>This is official backend server of collab-board application</h1><p>Copyright @CodingComrades</p><a href='http://localhost:8000/api/greet/hello'>Greet</a>"
+    "<h1>This is official backend server of collab-board application</h1><p>Copyright @CodingComrades</p><a href='https://collabboard-7ups.onrender.com/api/greet/hello'>Greet</a>"
   );
 });
 export default app;
