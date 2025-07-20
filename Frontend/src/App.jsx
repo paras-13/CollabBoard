@@ -1,11 +1,13 @@
-import Board from "./components/Board";
-import ToolBar from "./components/Toolbar";
-import Toolbox from "./components/Toolbox";
-import BoardProvider from "./store/BoardProvider";
-import ToolboxProvider from "./store/ToolboxProvider";
-import Room from "./components/Room";
-import api from "./api";
 import { useEffect } from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+import api from "./api";
+import Whiteboard from "./components/Whiteboard";
+
 function App() {
   useEffect(() => {
     const fetchData = async () => {
@@ -19,14 +21,13 @@ function App() {
     fetchData();
   }, []);
   return (
-    <BoardProvider>
-      <ToolboxProvider>
-        <Board />
-        <Room />
-        <ToolBar />
-        <Toolbox />
-      </ToolboxProvider>
-    </BoardProvider>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Navigate to="/whiteboard" replace />} />
+        <Route path="/whiteboard" element={<Whiteboard />} />
+        <Route path="/share-whiteboard/:mode/:room" element={<Whiteboard />} />
+      </Routes>
+    </Router>
   );
 }
 export default App;

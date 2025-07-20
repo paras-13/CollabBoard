@@ -7,9 +7,11 @@ import {
   SIZE_TOOL_ITEMS,
   STROKE_TOOL_TYPES,
   TOOL_ITEMS,
+  ROOM_ACCESS_MODE,
 } from "../../utils/constants";
 import toolboxContext from "../../store/toolbox-context";
 import boardContext from "../../store/board-context";
+import roomContext from "../../store/room-context";
 const Toolbox = () => {
   const { activeToolItem } = useContext(boardContext);
   const {
@@ -18,6 +20,9 @@ const Toolbox = () => {
     changeFillHandler,
     changeSizeHandler,
   } = useContext(toolboxContext);
+  const { userMode } = useContext(roomContext);
+  if (userMode === ROOM_ACCESS_MODE.CLIENT_MODE) return;
+
   const strokeColor = toolboxState[activeToolItem]?.stroke;
   const fillColor = toolboxState[activeToolItem]?.fill;
   const size = toolboxState[activeToolItem]?.size;

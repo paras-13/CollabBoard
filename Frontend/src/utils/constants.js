@@ -1,5 +1,3 @@
-import { LuImageDown } from "react-icons/lu";
-
 export const TOOL_ITEMS = {
   LINE: "LINE",
   RECTANGLE: "RECTANGLE",
@@ -35,7 +33,20 @@ export const TOOLBOX_ACTIONS = {
   CHANGE_SIZE: "CHANGE_SIZE",
 };
 
+export const ROOM_ACTIONS = {
+  SET_ROOM_ID: "SET_ROOM_ID",
+  SET_USER_MODE: "SET_USER_MODE",
+  SET_USER_INFO: "SET_USER_INFO",
+};
+
+export const ROOM_ACCESS_MODE = {
+  HOST_MODE: "HOST_MODE",
+  CLIENT_MODE: "CLIENT_MODE",
+  USER_MODE: "USER_MODE",
+};
+
 export const FILL_TOOL_TYPES = [TOOL_ITEMS.RECTANGLE, TOOL_ITEMS.CIRCLE];
+
 export const STROKE_TOOL_TYPES = [
   TOOL_ITEMS.LINE,
   TOOL_ITEMS.RECTANGLE,
@@ -44,6 +55,7 @@ export const STROKE_TOOL_TYPES = [
   TOOL_ITEMS.BRUSH,
   TOOL_ITEMS.TEXT,
 ];
+
 export const SIZE_TOOL_ITEMS = [
   TOOL_ITEMS.LINE,
   TOOL_ITEMS.ARROW,
@@ -52,6 +64,7 @@ export const SIZE_TOOL_ITEMS = [
   TOOL_ITEMS.BRUSH,
   TOOL_ITEMS.TEXT,
 ];
+
 export const TOOL_ACTION_TYPES = {
   NONE: "NONE",
   DRAWING: "DRAWING",
@@ -69,4 +82,5 @@ export const COLORS = {
   PURPLE: "#800080",
 };
 export const ARROW_LENGTH = 10;
+
 export const ELEMENT_ERASE_THRESHOLD = 0.1;

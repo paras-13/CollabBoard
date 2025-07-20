@@ -90,7 +90,6 @@ const ToolboxProvider = ({ children }) => {
     <toolboxContext.Provider value={toolboxContextValue}>
       {children}
     </toolboxContext.Provider>
-    // <div>toolboxProvider</div>
   );
 };
 export default ToolboxProvider;

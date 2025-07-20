@@ -1,10 +1,22 @@
-import { useEffect, useRef, useContext, useLayoutEffect } from "react";
+import {
+  useEffect,
+  useRef,
+  useContext,
+  useLayoutEffect,
+  useState,
+} from "react";
 import rough from "roughjs";
 import boardContext from "../../store/board-context";
-import { TOOL_ACTION_TYPES, TOOL_ITEMS } from "../../utils/constants";
+import {
+  TOOL_ACTION_TYPES,
+  TOOL_ITEMS,
+  ROOM_ACCESS_MODE,
+} from "../../utils/constants";
 import toolboxContext from "../../store/toolbox-context";
 import cx from "classnames";
 import classes from "./index.module.css";
+import roomContext from "../../store/room-context";
+import JoinRoomForm from "./JoinRoomForm";
 function Board() {
   const imageCache = useRef({});
   const canvasRef = useRef();
@@ -23,6 +35,9 @@ function Board() {
     backgroundColor,
   } = useContext(boardContext);
 
+  // user Mode
+  const { userMode, userName, userId } = useContext(roomContext);
+  const [viewJoinFormModal, setviewJoinFormModal] = useState(true);
   useEffect(() => {
     const canvas = canvasRef.current;
     canvas.width = window.innerWidth;
@@ -112,16 +127,28 @@ function Board() {
   }, [toolActionType]);
 
   const handleMouseDown = (e) => {
+    if (userMode === ROOM_ACCESS_MODE.CLIENT_MODE) return;
     boardMouseDownHandler(e, toolboxState);
   };
   const handleMouseMove = (e) => {
+    if (userMode === ROOM_ACCESS_MODE.CLIENT_MODE) return;
     boardMouseMoveHandler(e);
   };
   const handleMouseUp = () => {
+    if (userMode === ROOM_ACCESS_MODE.CLIENT_MODE) return;
     boardMouseUpHandler();
   };
   return (
     <>
+      {userMode === ROOM_ACCESS_MODE.CLIENT_MODE &&
+        !userName &&
+        !userId &&
+        viewJoinFormModal && (
+          <JoinRoomForm
+            setviewJoinFormModal={setviewJoinFormModal}
+            className={classes.container}
+          />
+        )}
       {toolActionType === TOOL_ACTION_TYPES.WRITING && (
         <textarea
           type="text"
@@ -143,15 +170,19 @@ function Board() {
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
-        className={cx({
-          [classes.brushIcon]: activeToolItem === TOOL_ITEMS.BRUSH,
-          [classes.shapeIcon]:
-            activeToolItem === TOOL_ITEMS.CIRCLE ||
-            activeToolItem === TOOL_ITEMS.RECTANGLE ||
-            activeToolItem === TOOL_ITEMS.IMAGE ||
-            activeToolItem === TOOL_ITEMS.ARROW,
-          [classes.eraseIcon]: activeToolItem === TOOL_ITEMS.ERASER,
-        })}
+        className={
+          userMode !== ROOM_ACCESS_MODE.CLIENT_MODE
+            ? cx({
+                [classes.brushIcon]: activeToolItem === TOOL_ITEMS.BRUSH,
+                [classes.shapeIcon]:
+                  activeToolItem === TOOL_ITEMS.CIRCLE ||
+                  activeToolItem === TOOL_ITEMS.RECTANGLE ||
+                  activeToolItem === TOOL_ITEMS.IMAGE ||
+                  activeToolItem === TOOL_ITEMS.ARROW,
+                [classes.eraseIcon]: activeToolItem === TOOL_ITEMS.ERASER,
+              })
+            : undefined
+        }
       ></canvas>
     </>
   );

@@ -17,8 +17,9 @@ import { LuRectangleHorizontal } from "react-icons/lu";
 import { MdDelete } from "react-icons/md";
 import { PiCursorFill } from "react-icons/pi";
 import { RxDropdownMenu } from "react-icons/rx";
-import { TOOL_ITEMS } from "../../utils/constants";
+import { TOOL_ITEMS, ROOM_ACCESS_MODE } from "../../utils/constants";
 import boardContext from "../../store/board-context";
+import roomContext from "../../store/room-context";
 const ToolBar = () => {
   const {
     activeToolItem,
@@ -29,6 +30,10 @@ const ToolBar = () => {
     boardImageUploadHandler,
     setBackgroundColor,
   } = useContext(boardContext);
+  const [showBgDropdown, setShowBgDropdown] = useState(false);
+  const [customColor, setCustomColor] = useState("#054865");
+  const dropdownRef = useRef();
+  const { userMode } = useContext(roomContext);
   const handleClear = () => {
     changeToolHandler(TOOL_ITEMS.CLEAR);
     clear();
@@ -54,9 +59,6 @@ const ToolBar = () => {
     changeToolHandler(TOOL_ITEMS.IMAGE);
   };
 
-  const [showBgDropdown, setShowBgDropdown] = useState(false);
-  const [customColor, setCustomColor] = useState("#054865");
-  const dropdownRef = useRef();
   useEffect(() => {
     function handleClickOutside(event) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -71,6 +73,8 @@ const ToolBar = () => {
     };
   }, [showBgDropdown]);
 
+  // Hide toolbar for client
+  if (userMode === ROOM_ACCESS_MODE.CLIENT_MODE) return;
   return (
     <>
       <div

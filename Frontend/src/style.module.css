@@ -1,0 +1,23 @@
+.formButton {
+  @apply w-full mt-4 py-2 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 transition duration-200;
+}
+.formInputBox {
+  @apply w-full p-2 mt-1 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 bg-slate-100;
+}
+.inputLabel {
+  @apply block text-sm font-medium text-gray-700 mt-2;
+}
+.head {
+  @apply text-xl font-semibold text-center mb-4 text-gray-800;
+}
+.formContainer {
+  @apply bg-slate-200 rounded-xl p-6 w-96 shadow-xl relative;
+}
+.largeButton {
+  @apply w-full py-2.5 px-5 me-2 mb-2 mt-2 text-sm font-medium focus:outline-none text-white bg-white
+          rounded-full border dark:bg-slate-500 border-gray-200 hover:bg-slate-700 focus:z-10;
+}
+.smallButton {
+  @apply py-2.5 px-5 me-2 mb-2 mt-2 text-sm font-medium focus:outline-none text-white bg-white
+          rounded-full border dark:bg-slate-500 border-gray-200 hover:bg-slate-700 focus:z-10;
+}
